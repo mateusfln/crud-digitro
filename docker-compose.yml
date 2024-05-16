@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "84:80"
+    volumes:
+      - ./www:/www
+      - ./site.conf:/etc/nginx/conf.d/site.conf
+    links:
+      - php
+      - db
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+    - "3366:3366"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crud_digitro
+  php:
+    image: mateus/php-com-mysql
+    container_name: php-fpm
+    volumes:
+    - ./www:/www
