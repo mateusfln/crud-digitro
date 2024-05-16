@@ -4,8 +4,12 @@ require_once('vendor/autoload.php');
 require_once('src/config/env.php');
 $controller = new FuncionariosController();
 
+$feedbackDelete = '';
+if ($_POST) {
+  $feedbackDelete = $controller->delete($_POST['id']);
+}
+
 $table = $controller->index();
-$delete = $controller->delete();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -19,15 +23,19 @@ $delete = $controller->delete();
 </head>
 <body>
   <h class="container">
-    <h1>CRUD de Funcionarios</h1>
+    <h1 class="text-center h1 font-weight-bold mb-5">CRUD de Funcionarios</h1>
 
-    <div class="row mt-3">
-      <a href="create.php" class="btn btn-primary">Novo Funcionario</a>
-    </div>
+    
 
     <div class="container">
-    <table class="table table-hover progress-table text-center">
-        <thead class="text-uppercase">
+      <?= $feedbackDelete?>
+      <div class="d-flex justify-content-end ">
+        <div class="my-3">
+          <a href="create.php" class="btn btn-success"><i class="bi bi-plus me-2"></i>Novo Funcionario</a>
+        </div>
+      </div>
+    <table class="table table-hover progress-table text-center shadow-sm ">
+        <thead class="text-uppercase border-dark border-2">
         <tr>
             <th scope="col"> ID </th>
             <th scope="col"> Nome </th>
@@ -39,6 +47,15 @@ $delete = $controller->delete();
         </tr>
         </thead>
         <tbody>
+    <?php if (empty($table)): ?>
+      <tr>
+          <td colspan="10">
+            <div class="alert alert-warning" role="alert">
+              Não existem registros disponíveis!
+            </div>
+          </td>
+      </tr>
+      <?php else: ?>
     <?php foreach($table as $funcionario):?>
         <tr>
             <td><?=$funcionario->getId()?></td>
@@ -49,15 +66,16 @@ $delete = $controller->delete();
             <td><?=$funcionario->getEstadoCivil()?></td>
             <td>
                 <ul class="d-flex justify-content-center gap-3">
-                    <a href="update.php?id=<?=$funcionario->getId()?>" class="btn btn-warning text-light"><i class="bi bi-pencil-square mr-1"></i>Edit</a>
+                    <a href="update.php?id=<?=$funcionario->getId()?>" class="btn btn-warning text-light"><i class="bi bi-pencil-square me-2"></i>Edit</a>
                     <form method="POST">
                         <input type="hidden" name="id" value="<?=$funcionario->getId()?>">
-                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash mr-3"></i>Delete</button>
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-2"></i>Delete</button>
                     </form>
-                </ul>
+              </ul>
             </td>
         </tr>
     <?php endforeach;?>
+    <?php endif;?>
         </tbody>
     </table>
     </div>

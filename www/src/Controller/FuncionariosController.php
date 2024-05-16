@@ -15,7 +15,6 @@ class FuncionariosController
 
     public function create()
     {
-        header('Location: '.'index.php');
         return $this->model->insert();
     }
 
@@ -24,20 +23,26 @@ class FuncionariosController
         return $this->model->findAll();
     }
 
+    public function read($id)
+    {
+        return $this->model->findById($id);
+    }
+
     public function update($id)
     {
         if ($_POST){
-            $this->model->edit($id);
+            return $this->model->edit($id);
+        }else{
+            return $this->model->read($id);
         }
-        return $this->model->read($id);
     }
     
-    public function delete()
+    public function delete($id)
     {     
         if ($_POST){    
-            $this->model->delete($_POST['id']);
-            header('Location: '.'index.php');
+            return $this->model->delete($id);
+        }else{
+            return $this->index();
         }
-        return $this->index();
     }
 }

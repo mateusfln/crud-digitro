@@ -3,11 +3,12 @@ use App\Controller\FuncionariosController;
 require_once('vendor/autoload.php');
 require_once('src/config/env.php');
 
-
 $controller = new FuncionariosController();
+$feedbackMessage = '';
 if (isset($_POST['ds_nome']) && isset($_POST['dt_nascimento']) && isset($_POST['ds_cpf']) && isset($_POST['ds_email']) && isset($_POST['ds_estadocivil'])) {
-  $table = $controller->create();
+  $feedbackMessage = $controller->create();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -19,13 +20,19 @@ if (isset($_POST['ds_nome']) && isset($_POST['dt_nascimento']) && isset($_POST['
   <title>Adicionar Funcionario</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
 </head>
 
 <body>
+  
   <div class="container">
-    <h1>Adicionar Funcionario</h1>
-<div class="card p-4">
+    <a href="index.php" class="btn btn-info mt-5"><h><i class="bi bi-arrow-left"></i></h5></a>
+    <h1 class="text-center h1 font-weight-bold m-5">Adicionar Funcionario</h1>
+    <?= $feedbackMessage?>
+<div class="card p-4 shadow-sm ">
 <form id="form-create-funcionario" action="create.php" method="post">
 
       <div class="row">
@@ -57,13 +64,13 @@ if (isset($_POST['ds_nome']) && isset($_POST['dt_nascimento']) && isset($_POST['
       <button type="submit" class="btn btn-primary">Adicionar</button>
     </form>
 </div>
-  </div>
-
+</div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 
   <script src="script.js"></script>
+  
 </body>
 
 </html>

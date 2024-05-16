@@ -2,9 +2,15 @@
 use App\Controller\FuncionariosController;
 require_once('vendor/autoload.php');
 require_once('src/config/env.php');
-$funcionario = new FuncionariosController();
 
-$funcionario = $funcionario->update($_GET['id']);
+$controller = new FuncionariosController();
+$feedbackMessage = '';
+if (isset($_POST['ds_nome']) && isset($_POST['dt_nascimento']) && isset($_POST['ds_cpf']) && isset($_POST['ds_email']) && isset($_POST['ds_estadocivil'])) {
+  $feedbackMessage = $controller->update($_GET['id']);
+}
+
+$funcionario = $controller->read($_GET['id']);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -16,12 +22,15 @@ $funcionario = $funcionario->update($_GET['id']);
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
 <body>
   <div class="container">
-    <h1>Editar dados de: <?= $funcionario->getNome()?></h1>
-<div class="card p-4">
+  <a href="index.php" class="btn btn-info mt-5"><h><i class="bi bi-arrow-left"></i></h5></a>
+    <h1 class="text-center h1 font-weight-bold m-5">Editar dados de: <?= $funcionario->getNome()?></h1>
+    <?= $feedbackMessage?>
+<div class="card p-4 shadow-sm ">
 <form id="form-edit-funcionario" method="post">
 
       <div class="row">
@@ -53,7 +62,8 @@ $funcionario = $funcionario->update($_GET['id']);
       <input type="submit" class="btn btn-primary" value="Editar">
     </form>
 </div>
-    
+</div> 
+</div> 
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
