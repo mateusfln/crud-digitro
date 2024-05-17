@@ -38,11 +38,17 @@ cd crud-digitro
 ```
 docker-compose up -d
 ```
+```
+cd www && composer update
+```
 
 5. Acesse a aplicação em seu navegador web:
 
 ```
-http://localhost:8000
+
+http://crud-digitro.localhost:84/setup.php // para criar as tabelas e inserir dados
+http://crud-digitro.localhost:84/ // pagina principal
+
 ```
 
 ## Estrutura do Projeto
@@ -59,8 +65,10 @@ A estrutura do projeto está organizada da seguinte forma:
 |      |-- View/
 |-- docker-compose.yml
 |-- Dockerfile
+|-- site.conf
 ```
-
+- **www/**: Diretório mapeado no Nginx para conter o projeto e disponibilizar na web).
+- **src/**: Diretório contendo os arquivos PHP da aplicação organizados utilizando a arquitetura MVC (Model, View, Controler).
 - **docker-compose.yml**: Arquivo de configuração do Docker Compose para criar e gerenciar os contêineres da aplicação.
 - **Dockerfile**: Arquivo utilizado para sobrescrever uma imagem ja existente e instalar algumas dependencias necessárias.
-- **src/**: Diretório contendo os arquivos PHP da aplicação organizados utilizando a arquitetura MVC (Model, View, Controler).
+- **site.conf**: Arquivo utilizado para organizar as configurações do site (Nginx, arquivos padrão e etc).
