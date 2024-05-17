@@ -16,10 +16,12 @@
 
     <div class="container">
       <?php
-      if($returnDeleteFuncionario[0]){
-        echo "<div class='alert alert-success' role='alert'>Funcionário excluido com sucesso!</div>";
-      } else {
-        echo "<div class='alert alert-danger' role='alert'>Não foi possível excluir o funcionário, $feedbackDeleteError!</div>";
+      if (!empty($returnDeleteFuncionario)){
+        if($returnDeleteFuncionario[0]){
+          echo "<div class='alert alert-success' role='alert'>Funcionário excluido com sucesso!</div>";
+        } else {
+          echo "<div class='alert alert-danger' role='alert'>Não foi possível excluir o funcionário, $feedbackDeleteError!</div>";
+        }
       }
        ?>
       <div class="d-flex justify-content-end ">
