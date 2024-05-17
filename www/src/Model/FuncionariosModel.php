@@ -21,7 +21,21 @@ class FuncionariosModel
     public function findAll(): array|null
     {
         try {
-            $query = $this->conn->getConnection()->query("SELECT id, ds_nome, dt_nascimento, ds_cpf, ds_email, ds_estadocivil FROM {$this->table} LIMIT 200;");
+            $query = $this->conn
+            ->getConnection()
+            ->query(
+                "SELECT 
+                funcionarios.id,
+                ds_nome, 
+                dt_nascimento, 
+                ds_cpf, 
+                ds_email, 
+                ds_estadocivil 
+                FROM {$this->table}
+                INNER JOIN estado_civil
+                on funcionarios.estadocivil_id = estado_civil.id 
+                LIMIT 200;");
+
             $funcionarios = [];
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $funcionario = new Funcionario();
@@ -33,7 +47,6 @@ class FuncionariosModel
                 $funcionario->setEstadoCivil($row['ds_estadocivil']);
                 $funcionarios[] = $funcionario;
             }
-
             return $funcionarios;
 
         } catch (Exception $e) {
@@ -42,43 +55,38 @@ class FuncionariosModel
         }
     }
 
-    public function insert(): string
+    public function insert(): array
     {
         if (!$this->validaCPF($_POST['ds_cpf'])) {
-            return '<div class="alert alert-danger" role="alert">
-            Não foi possivel cadastrar o funcionario, Cpf inválido!
-          </div>';
+            return [false, 'ds_cpf'];
         }
         if (!$this->validaEmail($_POST['ds_email'])) {
-            return '<div class="alert alert-danger" role="alert">
-            Não foi possivel cadastrar o funcionario, email inválido!
-          </div>';
+            return [false, 'ds_email'];
         }
         try {
+            $_POST['estadocivil_id'] = (int)$_POST['estadocivil_id'];
             $this->conn
                 ->getConnection()
                 ->exec(
                     "INSERT INTO {$this->table} 
-                    (ds_nome, 
+                    (
+                    estadocivil_id,
+                    ds_nome, 
                     dt_nascimento, 
                     ds_cpf, 
-                    ds_email, 
-                    ds_estadocivil) 
-                    VALUES 
-                    ('{$_POST['ds_nome']}', 
+                    ds_email) 
+                    VALUES (
+                    {$_POST['estadocivil_id']},
+                    '{$_POST['ds_nome']}', 
                     '{$_POST['dt_nascimento']}', 
                     '{$_POST['ds_cpf']}', 
-                    '{$_POST['ds_email']}', 
-                    '{$_POST['ds_estadocivil']}'
+                    '{$_POST['ds_email']}'
                     )"
                 );
-                return '<div class="alert alert-success" role="alert">
-                Funcionario cadastrado com sucesso!
-              </div>'; 
+
+                return [true, ''];
         } catch (Exception $e) {
-            return  "<div class='alert alert-danger' role='alert'>
-            não foi possvel cadastrar o funcionario! {$e->getMessage()}
-          </div>";
+            return [false, $e->getMessage()];
         }
     }
 
@@ -86,66 +94,65 @@ class FuncionariosModel
     {
         $sql =
             "SELECT
-            id, 
+            {$this->table}.id, 
             ds_nome, 
             dt_nascimento, 
             ds_cpf, 
             ds_email, 
             ds_estadocivil
             FROM {$this->table}
-            WHERE id = {$id};";
+            INNER JOIN estado_civil
+            on {$this->table}.estadocivil_id = estado_civil.id
+            WHERE {$this->table}.id = {$id};";
         $query = $this->conn->getConnection()->query($sql);
 
         return (new Funcionario())->hydrate($query->fetch(PDO::FETCH_ASSOC));
     }
 
-    public function edit(int $id): string
+    public function edit(int $id): array
     {
         if (!$this->validaCPF($_POST['ds_cpf'])) {
-            return '<div class="alert alert-danger" role="alert">
-            Não foi possivel atualizar o funcionario, Cpf inválido!
-          </div>';
+            return [false, 'ds_cpf'];
         }
 
         if (!$this->validaEmail($_POST['ds_email'])) {
-            return '<div class="alert alert-danger" role="alert">
-            Não foi possivel atualizar o funcionario, email inválido!
-          </div>';
+            return [false, 'ds_email'];
         }
         try {
             $this->conn
                 ->getConnection()
                 ->query(
                     "UPDATE {$this->table} SET
+                estadocivil_id = '{$_POST['estadocivil_id']}',
                 ds_nome = '{$_POST['ds_nome']}', 
                 dt_nascimento = '{$_POST['dt_nascimento']}', 
                 ds_cpf = '{$_POST['ds_cpf']}', 
-                ds_email = '{$_POST['ds_email']}', 
-                ds_estadocivil = '{$_POST['ds_estadocivil']}'
+                ds_email = '{$_POST['ds_email']}'
                 WHERE id = {$id}
                 "
                 )->fetch(PDO::FETCH_ASSOC);
-            return '<div class="alert alert-success" role="alert">
-            Funcionario atualizado com sucesso!
-            </div>'; 
+
+                return [true, ''];
+ 
         } catch (Exception $e) {
-            return  "<div class='alert alert-danger' role='alert'>
-            não foi possvel atualizar o funcionario! {$e->getMessage()}
-          </div>";
+            return [false, $e->getMessage()];
         }
     }
 
-    public function delete(int $id): string
+    public function delete(int $id): array
     {
         try {
-            $this->conn->getConnection()->query("DELETE FROM {$this->table} WHERE id = {$id};")->fetch(PDO::FETCH_ASSOC);
-            return  "<div class='alert alert-success' role='alert'>
-            funcionario excluido com sucesso! 
-            </div>";
+            $this->conn
+            ->getConnection()
+            ->query(
+                "DELETE FROM {$this->table}
+                 WHERE id = {$id};")
+                 ->fetch(PDO::FETCH_ASSOC);
+            
+            return [true, ''];
+
         } catch (Exception $e) {
-            return  "<div class='alert alert-danger' role='alert'>
-            Não foi possivel excluir o funcionario, {$e->getMessage()}! 
-            </div>";
+            return [false, $e->getMessage()];
         }
 
     }
@@ -155,14 +162,17 @@ class FuncionariosModel
         try {
             $query = $this->conn->getConnection()
                 ->query(
-                    "SELECT 
+                    "SELECT
+                funcionarios.id,
                 ds_nome, 
                 dt_nascimento, 
                 ds_cpf, 
                 ds_email, 
                 ds_estadocivil 
-                FROM {$this->table} 
-                WHERE id = {$id}
+                FROM {$this->table}
+                INNER JOIN estado_civil
+                on funcionarios.estadocivil_id = estado_civil.id 
+                WHERE {$this->table}.id = {$id}
                 LIMIT 200;"
                 );
 

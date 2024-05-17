@@ -17,14 +17,14 @@ class Funcionario
     private string $ds_estadocivil;
 
 
-    public function __construct(int $id = 1, string $ds_nome = "", \DateTime $dt_nascimento = new \DateTime(""), string $ds_cpf = "", string $ds_email = "", string $ds_estadocivil = "")
+    public function __construct(int $id = 1, string $ds_nome = "", DateTime $dt_nascimento = new DateTime(""), string $ds_cpf = "", string $ds_email = "", string $ds_estadocivil = "")
     {
         $this->id = $id;
         $this->ds_nome = $ds_nome;
         $this->dt_nascimento = $dt_nascimento;
         $this->ds_cpf = $ds_cpf;
         $this->ds_email = $ds_email;
-        $this->ds_estado_civil = $ds_estadocivil;
+        $this->ds_estadocivil = $ds_estadocivil;
     }
 
     
