@@ -38,16 +38,32 @@ cd crud-digitro
 ```
 docker-compose up -d
 ```
-```
-cd www && composer update
-```
 
-5. Acesse a aplicação em seu navegador web:
+5. Entre na raiz do projeto:
 
 ```
+cd www
+```
 
-http://crud-digitro.localhost:84/setup.php // para criar as tabelas e inserir dados
-http://crud-digitro.localhost:84/ // pagina principal
+6. instale as dependencias do composer no projeto
+
+```
+composer update
+
+```
+
+7. Rode o arquivo de setup para criar as tabelas e colunas:
+
+
+```
+http://crud-digitro.localhost:84/setup.php
+
+```
+
+7. Acesse o endereço:
+
+```
+http://crud-digitro.localhost:84
 
 ```
 
