@@ -1,21 +1,3 @@
-<?php 
-// use App\Controller\EstadocivilController;
-// use App\Controller\FuncionariosController;
-// require_once('../../../vendor/autoload.php');
-// require_once('../../../src/config/env.php');
-
-// $controller = new FuncionariosController();
-// $estadocivilController = new EstadocivilController();
-
-// $feedbackMessage = '';
-// if (isset($_POST['ds_nome']) && isset($_POST['dt_nascimento']) && isset($_POST['ds_cpf']) && isset($_POST['ds_email']) && isset($_POST['estadocivil_id'])) {
-//   $feedbackMessage = $controller->update($_GET['id']);
-// }
-// $funcionario = $controller->read($_GET['id']);
-
-// $arrEstadocivil = $estadocivilController->index();
-
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -96,7 +78,6 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 
-  <script src="script.js"></script>
 </body>
 
 </html>

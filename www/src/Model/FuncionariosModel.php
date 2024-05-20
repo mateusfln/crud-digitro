@@ -25,7 +25,7 @@ class FuncionariosModel
             ->getConnection()
             ->query(
                 "SELECT 
-                funcionarios.id,
+                {$this->table}.id,
                 ds_nome, 
                 dt_nascimento, 
                 ds_cpf, 
@@ -33,7 +33,7 @@ class FuncionariosModel
                 ds_estadocivil 
                 FROM {$this->table}
                 INNER JOIN estado_civil
-                on funcionarios.estadocivil_id = estado_civil.id 
+                on {$this->table}.estadocivil_id = estado_civil.id 
                 LIMIT 200;");
 
             $funcionarios = [];
@@ -163,7 +163,7 @@ class FuncionariosModel
             $query = $this->conn->getConnection()
                 ->query(
                     "SELECT
-                funcionarios.id,
+                {$this->table}.id,
                 ds_nome, 
                 dt_nascimento, 
                 ds_cpf, 
@@ -171,7 +171,7 @@ class FuncionariosModel
                 ds_estadocivil 
                 FROM {$this->table}
                 INNER JOIN estado_civil
-                on funcionarios.estadocivil_id = estado_civil.id 
+                on {$this->table}.estadocivil_id = estado_civil.id 
                 WHERE {$this->table}.id = {$id}
                 LIMIT 200;"
                 );
