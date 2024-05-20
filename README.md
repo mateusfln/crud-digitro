@@ -60,7 +60,7 @@ http://crud-digitro.localhost:84/setup.php
 
 ```
 
-7. Acesse o endereço:
+8. Acesse o endereço:
 
 ```
 http://crud-digitro.localhost:84
