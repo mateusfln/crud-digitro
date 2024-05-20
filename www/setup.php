@@ -6,6 +6,9 @@ require_once('src/config/env.php');
 
 $conn = Database::getInstance();
 
+$conn->getConnection()->exec("DROP TABLE IF EXISTS funcionarios");
+$conn->getConnection()->exec("DROP TABLE IF EXISTS estado_civil");
+
 $conn->getConnection()->exec(
     "CREATE TABLE funcionarios (
         id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -36,3 +39,5 @@ $conn->getConnection()->exec(
     FOREIGN KEY (estadocivil_id)
     REFERENCES estado_civil(id)");
 
+echo "Tabelas criadas com sucesso!";
+echo "<br><a href='/'> Pagina principal</a>";
